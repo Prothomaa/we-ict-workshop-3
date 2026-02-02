@@ -657,14 +657,9 @@
             transform: scale(0.95);
         }
 
-        .nav-links.mobile-open {
-            display: flex;
-        }
-
         /* Responsive */
         @media (max-width: 768px) {
             .nav-links {
-                display: none;
                 position: fixed;
                 top: 70px;
                 left: 0;
@@ -677,18 +672,16 @@
                 border-bottom: 1px solid rgba(255, 255, 255, 0.1);
                 box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
                 z-index: 999;
-                animation: slideDown 0.3s ease;
+                max-height: 0;
+                overflow: hidden;
+                opacity: 0;
+                transition: all 0.3s ease;
             }
 
-            @keyframes slideDown {
-                from {
-                    opacity: 0;
-                    transform: translateY(-20px);
-                }
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
+            .nav-links.mobile-open {
+                max-height: 600px;
+                opacity: 1;
+                display: flex;
             }
 
             .nav-links li {
@@ -781,7 +774,7 @@
                 <img src="logo.jpeg" alt="WE-ICT Logo">
                 <span class="logo-text">WE-ICT 2014</span>
             </div>
-            <ul class="nav-links">
+            <ul class="nav-links" id="navLinks">
                 <li><a href="#about">About</a></li>
                 <li><a href="#venue">Venue</a></li>
                 <li><a href="#keynote">Keynote</a></li>
@@ -792,7 +785,7 @@
                 <li><a href="#dates">Important Dates</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
-            <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle menu">☰</button>
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">☰</button>
         </nav>
     </header>
 
@@ -1228,7 +1221,7 @@
             <p style="margin-bottom: 1rem; font-size: 1rem; line-height: 1.6;">Dhaka-1000, Bangladesh</p>
             <div style="margin-top: 2rem; padding: 1rem; background: rgba(255, 255, 255, 0.03); border-radius: 10px;">
                 <p style="font-size: 1rem; margin-bottom: 0.5rem;"><strong style="color: var(--primary);">Email:</strong></p>
-                <a href="/cdn-cgi/l/email-protection#582c39362231353930392b303d35183f35393134763b3735" style="color: var(--secondary); text-decoration: none; word-break: break-all; font-size: 1rem;"><span class="__cf_email__" data-cfemail="176376796d7e7a767f76647f727a57707a767e7b3974787a">[email&#160;protected]</span></a>
+                <a href="mailto:tanzima@cse.buet.ac.bd" style="color: var(--secondary); text-decoration: none; word-break: break-all; font-size: 1rem;">tanzima@cse.buet.ac.bd</a>
             </div>
             <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(255, 255, 255, 0.03); border-radius: 10px;">
                 <p style="font-size: 1rem; margin-bottom: 0.5rem;"><strong style="color: var(--primary);">Website:</strong></p>
@@ -1266,8 +1259,8 @@
         </div>
     </footer>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-        // Add animate class to all fade-in elements for progressive enhancement
+    <script>
+        // Add animate class to all fade-in elements
         document.querySelectorAll('.fade-in').forEach(el => {
             el.classList.add('animate');
         });
@@ -1300,34 +1293,32 @@
             }
         });
 
-        // Mobile Menu Toggle
-        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-        const navLinks = document.querySelector('.nav-links');
+        // Mobile Menu Toggle - FIXED VERSION
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navLinks = document.getElementById('navLinks');
         
-        if (mobileMenuBtn && navLinks) {
-            mobileMenuBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                navLinks.classList.toggle('mobile-open');
-                mobileMenuBtn.textContent = navLinks.classList.contains('mobile-open') ? '✕' : '☰';
-            });
+        // Toggle menu on button click
+        mobileMenuBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            navLinks.classList.toggle('mobile-open');
+            this.textContent = navLinks.classList.contains('mobile-open') ? '✕' : '☰';
+        });
 
-            // Close mobile menu when clicking on a link
-            document.querySelectorAll('.nav-links a').forEach(link => {
-                link.addEventListener('click', () => {
-                    navLinks.classList.remove('mobile-open');
-                    mobileMenuBtn.textContent = '☰';
-                });
+        // Close mobile menu when clicking on a link
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('mobile-open');
+                mobileMenuBtn.textContent = '☰';
             });
+        });
 
-            // Close menu when clicking outside
-            document.addEventListener('click', (e) => {
-                if (!navLinks.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
-                    navLinks.classList.remove('mobile-open');
-                    mobileMenuBtn.textContent = '☰';
-                }
-            });
-        }
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!navLinks.contains(e.target) && e.target !== mobileMenuBtn) {
+                navLinks.classList.remove('mobile-open');
+                mobileMenuBtn.textContent = '☰';
+            }
+        });
 
         // Smooth Scrolling
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -1356,11 +1347,12 @@
                 particle.style.left = Math.random() * 100 + '%';
                 particle.style.top = Math.random() * 100 + '%';
                 particle.style.animationDelay = Math.random() * 20 + 's';
-                particle.style.animationDelay = Math.random() * 20 + 's';
                 particle.style.animationDuration = Math.random() * 10 + 10 + 's';
                 particlesContainer.appendChild(particle);
-                 }
-    }
+            }
+        }
 
-    createParticles();
+        createParticles();
     </script>
+</body>
+</html>
