@@ -619,12 +619,17 @@
 
         /* Scroll Animations */
         .fade-in {
-            opacity: 0;
-            transform: translateY(30px);
+            opacity: 1;
+            transform: translateY(0);
             transition: all 0.8s ease;
         }
 
-        .fade-in.visible {
+        .fade-in.animate {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .fade-in.animate.visible {
             opacity: 1;
             transform: translateY(0);
         }
@@ -1209,6 +1214,11 @@
     </footer>
 
     <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+        // Add animate class to all fade-in elements for progressive enhancement
+        document.querySelectorAll('.fade-in').forEach(el => {
+            el.classList.add('animate');
+        });
+
         // Scroll Animation Observer
         const observerOptions = {
             threshold: 0.1,
