@@ -142,17 +142,6 @@
         .nav-links a:hover::after {
             width: 100%;
         }
-        .mobile-menu-btn {
-            display: none;
-            background: rgba(217, 70, 166, 0.2);
-            border: 2px solid var(--primary);
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            z-index: 990;
-        }
 
         /* Hero Section */
         .hero {
@@ -645,46 +634,29 @@
             transform: translateY(0);
         }
 
-        /* Mobile Styles */
-        @media (max-width: 768px) {
-            .mobile-menu-btn {
-                display: block;
-            }
-
-            .nav-links {
-                position: fixed;
-                top: 70px;
-                left: 0;
-                right: 0;
-                background: rgba(15, 23, 42, 0.98);
-                backdrop-filter: blur(20px);
-                flex-direction: column;
-                padding: 0;
-                gap: 0;
-                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-                z-index: 999;
-                transform: translateY(-100%);
-                opacity: 0;
-                transition: transform 0.3s ease, opacity 0.3s ease;
-                max-height: calc(100vh - 70px);
-                overflow-y: auto;
-            }
-
-            .nav-links.mobile-open {
-                transform: translateY(0);
-                opacity: 1;
-            }
-
-            .nav-links li {
-                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            }
-
-            .nav-links a {
-                display: block;
-                padding: 1.2rem 2rem;
-                font-size: 1.1rem;
-            }
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            background: rgba(217, 70, 166, 0.2);
+            border: 2px solid var(--primary);
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            z-index: 1001;
+            position: relative;
         }
+
+        .mobile-menu-btn:hover {
+            background: var(--primary);
+        }
+
+        .mobile-menu-btn:active {
+            transform: scale(0.95);
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .nav-links {
@@ -695,27 +667,28 @@
                 background: rgba(15, 23, 42, 0.98);
                 backdrop-filter: blur(20px);
                 flex-direction: column;
-                padding: 2rem;
-                gap: 1.5rem;
+                padding: 1.5rem 2rem;
+                gap: 1rem;
                 border-bottom: 1px solid rgba(255, 255, 255, 0.1);
                 box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
                 z-index: 999;
                 max-height: 0;
-                overflow: hidden;
+                overflow-y: auto;
+                overflow-x: hidden;
                 opacity: 0;
                 transition: all 0.3s ease;
             }
-
+        
             .nav-links.mobile-open {
-                max-height: 600px;
+                max-height: 80vh;
                 opacity: 1;
                 display: flex;
             }
-
+        
             .nav-links li {
                 text-align: center;
             }
-
+        
             .nav-links a {
                 font-size: 1.1rem;
                 display: block;
@@ -813,7 +786,7 @@
                 <li><a href="#dates">Important Dates</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
-            <button class="mobile-menu-btn" id="menuBtn" aria-label="Toggle menu">☰</button>
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">☰</button>
         </nav>
     </header>
 
@@ -1321,26 +1294,30 @@
             }
         });
 
-        const menuBtn = document.getElementById('menuBtn');
+        // Mobile Menu Toggle - FIXED VERSION
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const navLinks = document.getElementById('navLinks');
         
-        menuBtn.addEventListener('click', function(e) {
+        // Toggle menu on button click
+        mobileMenuBtn.addEventListener('click', function(e) {
             e.stopPropagation();
             navLinks.classList.toggle('mobile-open');
             this.textContent = navLinks.classList.contains('mobile-open') ? '✕' : '☰';
         });
-        
+
+        // Close mobile menu when clicking on a link
         navLinks.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', () => {
                 navLinks.classList.remove('mobile-open');
-                menuBtn.textContent = '☰';
+                mobileMenuBtn.textContent = '☰';
             });
         });
-        
+
+        // Close menu when clicking outside
         document.addEventListener('click', (e) => {
-            if (!navLinks.contains(e.target) && e.target !== menuBtn) {
+            if (!navLinks.contains(e.target) && e.target !== mobileMenuBtn) {
                 navLinks.classList.remove('mobile-open');
-                menuBtn.textContent = '☰';
+                mobileMenuBtn.textContent = '☰';
             }
         });
 
