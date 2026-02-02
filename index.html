@@ -637,11 +637,24 @@
         /* Mobile Menu */
         .mobile-menu-btn {
             display: none;
-            background: none;
-            border: none;
+            background: rgba(217, 70, 166, 0.2);
+            border: 2px solid var(--primary);
             color: white;
             font-size: 1.5rem;
             cursor: pointer;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            z-index: 1001;
+            position: relative;
+        }
+
+        .mobile-menu-btn:hover {
+            background: var(--primary);
+        }
+
+        .mobile-menu-btn:active {
+            transform: scale(0.95);
         }
 
         .nav-links.mobile-open {
@@ -779,7 +792,7 @@
                 <li><a href="#dates">Important Dates</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
-            <button class="mobile-menu-btn">☰</button>
+            <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle menu">☰</button>
         </nav>
     </header>
 
@@ -1215,7 +1228,7 @@
             <p style="margin-bottom: 1rem; font-size: 1rem; line-height: 1.6;">Dhaka-1000, Bangladesh</p>
             <div style="margin-top: 2rem; padding: 1rem; background: rgba(255, 255, 255, 0.03); border-radius: 10px;">
                 <p style="font-size: 1rem; margin-bottom: 0.5rem;"><strong style="color: var(--primary);">Email:</strong></p>
-                <a href="mailto:tanzimahashem@gmail.com" style="color: var(--secondary); text-decoration: none; word-break: break-all; font-size: 1rem;">tanzimahashem@gmail.com</a>
+                <a href="/cdn-cgi/l/email-protection#582c39362231353930392b303d35183f35393134763b3735" style="color: var(--secondary); text-decoration: none; word-break: break-all; font-size: 1rem;"><span class="__cf_email__" data-cfemail="176376796d7e7a767f76647f727a57707a767e7b3974787a">[email&#160;protected]</span></a>
             </div>
             <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(255, 255, 255, 0.03); border-radius: 10px;">
                 <p style="font-size: 1rem; margin-bottom: 0.5rem;"><strong style="color: var(--primary);">Website:</strong></p>
@@ -1253,7 +1266,7 @@
         </div>
     </footer>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
         // Add animate class to all fade-in elements for progressive enhancement
         document.querySelectorAll('.fade-in').forEach(el => {
             el.classList.add('animate');
@@ -1291,18 +1304,30 @@
         const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
         const navLinks = document.querySelector('.nav-links');
         
-        mobileMenuBtn.addEventListener('click', () => {
-            navLinks.classList.toggle('mobile-open');
-            mobileMenuBtn.textContent = navLinks.classList.contains('mobile-open') ? '✕' : '☰';
-        });
-
-        // Close mobile menu when clicking on a link
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                navLinks.classList.remove('mobile-open');
-                mobileMenuBtn.textContent = '☰';
+        if (mobileMenuBtn && navLinks) {
+            mobileMenuBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                navLinks.classList.toggle('mobile-open');
+                mobileMenuBtn.textContent = navLinks.classList.contains('mobile-open') ? '✕' : '☰';
             });
-        });
+
+            // Close mobile menu when clicking on a link
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', () => {
+                    navLinks.classList.remove('mobile-open');
+                    mobileMenuBtn.textContent = '☰';
+                });
+            });
+
+            // Close menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!navLinks.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                    navLinks.classList.remove('mobile-open');
+                    mobileMenuBtn.textContent = '☰';
+                }
+            });
+        }
 
         // Smooth Scrolling
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -1331,12 +1356,4 @@
                 particle.style.left = Math.random() * 100 + '%';
                 particle.style.top = Math.random() * 100 + '%';
                 particle.style.animationDelay = Math.random() * 20 + 's';
-                particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
-                particlesContainer.appendChild(particle);
-            }
-        }
-
-        createParticles();
-
-        // Dynamic gradient colors for particles
-        const particles = document.querySelect
+                particle.style.animatio
