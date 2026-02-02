@@ -644,10 +644,48 @@
             cursor: pointer;
         }
 
+        .nav-links.mobile-open {
+            display: flex;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .nav-links {
                 display: none;
+                position: fixed;
+                top: 70px;
+                left: 0;
+                right: 0;
+                background: rgba(15, 23, 42, 0.98);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                padding: 2rem;
+                gap: 1.5rem;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+                z-index: 999;
+                animation: slideDown 0.3s ease;
+            }
+
+            @keyframes slideDown {
+                from {
+                    opacity: 0;
+                    transform: translateY(-20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            .nav-links li {
+                text-align: center;
+            }
+
+            .nav-links a {
+                font-size: 1.1rem;
+                display: block;
+                padding: 0.5rem;
             }
 
             .mobile-menu-btn {
@@ -1170,17 +1208,19 @@
             <span class="section-label">Get in Touch</span>
             <h2>Contact Information</h2>
         </div>
-        <div style="max-width: 800px; margin: 0 auto; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 3rem; backdrop-filter: blur(10px);">
+        <div style="max-width: 800px; margin: 0 auto; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 2rem; backdrop-filter: blur(10px);">
             <h3 style="color: var(--primary); margin-bottom: 1.5rem; font-size: 1.5rem;">Dr. Tanzima Hashem</h3>
-            <p style="margin-bottom: 1rem; font-size: 1.1rem;">Department of Computer Science and Engineering</p>
-            <p style="margin-bottom: 1rem; font-size: 1.1rem;">Bangladesh University of Engineering and Technology</p>
-            <p style="margin-bottom: 1rem; font-size: 1.1rem;">Dhaka-1000, Bangladesh</p>
-            <p style="margin-top: 2rem; font-size: 1.2rem;">
-                <strong>Email:</strong> <a href="/cdn-cgi/l/email-protection#5b2f3a352132363a333a28333e361b3c363a323775383436" style="color: var(--secondary); text-decoration: none;"><span class="__cf_email__" data-cfemail="cabeaba4b0a3a7aba2abb9a2afa78aada7aba3a6e4a9a5a7">[email&#160;protected]</span></a>
-            </p>
-            <p style="margin-top: 2rem; font-size: 1.2rem;">
-                <strong>Website:</strong> <a href="http://buet.ac.bd/cse/HEQEP/workshop/WE-ICT" target="_blank" style="color: var(--secondary); text-decoration: none;">buet.ac.bd/cse/HEQEP/workshop/WE-ICT</a>
-            </p>
+            <p style="margin-bottom: 1rem; font-size: 1rem; line-height: 1.6;">Department of Computer Science and Engineering</p>
+            <p style="margin-bottom: 1rem; font-size: 1rem; line-height: 1.6;">Bangladesh University of Engineering and Technology</p>
+            <p style="margin-bottom: 1rem; font-size: 1rem; line-height: 1.6;">Dhaka-1000, Bangladesh</p>
+            <div style="margin-top: 2rem; padding: 1rem; background: rgba(255, 255, 255, 0.03); border-radius: 10px;">
+                <p style="font-size: 1rem; margin-bottom: 0.5rem;"><strong style="color: var(--primary);">Email:</strong></p>
+                <a href="mailto:tanzimahashem@gmail.com" style="color: var(--secondary); text-decoration: none; word-break: break-all; font-size: 1rem;">tanzimahashem@gmail.com</a>
+            </div>
+            <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(255, 255, 255, 0.03); border-radius: 10px;">
+                <p style="font-size: 1rem; margin-bottom: 0.5rem;"><strong style="color: var(--primary);">Website:</strong></p>
+                <a href="http://buet.ac.bd/cse/HEQEP/workshop/WE-ICT" target="_blank" style="color: var(--secondary); text-decoration: none; word-break: break-all; font-size: 0.95rem; display: block;">buet.ac.bd/cse/HEQEP/workshop/WE-ICT</a>
+            </div>
         </div>
     </section>
 
@@ -1245,6 +1285,23 @@
             } else {
                 header.classList.remove('scrolled');
             }
+        });
+
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('mobile-open');
+            mobileMenuBtn.textContent = navLinks.classList.contains('mobile-open') ? '✕' : '☰';
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('mobile-open');
+                mobileMenuBtn.textContent = '☰';
+            });
         });
 
         // Smooth Scrolling
